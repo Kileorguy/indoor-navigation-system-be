@@ -1,7 +1,6 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from routers import signal_router
 from client import fast_mqtt
 from gmqtt import Client as MQTTClient
 from subscribers import signal
@@ -18,7 +17,6 @@ async def lifespan(app_: FastAPI):
     await fast_mqtt.mqtt_shutdown()
 app = FastAPI(lifespan=lifespan)
 
-app.include_router(signal_router.router)
 
 @fast_mqtt.on_connect()
 def connect(client: MQTTClient, flags: int, rc: int, properties):
