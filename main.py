@@ -22,7 +22,7 @@ app.include_router(signal_router.router)
 
 @fast_mqtt.on_connect()
 def connect(client: MQTTClient, flags: int, rc: int, properties):
-    client.subscribe("/things/+")
+    client.subscribe("things/+")
     message = ("Connected: ", client, flags, rc, properties)
     logger.info(message)
 

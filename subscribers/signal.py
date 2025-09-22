@@ -13,6 +13,8 @@ async def toggle(client: MQTTClient, topic: str, payload: bytes, qos: int, prope
     msg = "Toggle Message: ", topic, payload.decode(), qos, properties
 
     logger.info(msg)
+    fast_mqtt.publish("things/signal", payload.decode(), qos=2, retain=True)
 
-    logger.info(await signal.publish_signal(payload.decode()))
+    result = await signal.publish_signal(payload.decode())
+    logger.info(result)
 
