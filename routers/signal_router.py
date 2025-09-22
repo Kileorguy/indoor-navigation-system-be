@@ -8,13 +8,15 @@ router = APIRouter(
 
 bool_val = False
 
-
+# ini buat rest API
 
 @router.get("/")
 async def read_bool():
     return {"bool": bool_val}
 
 @router.post("/")
-async def update_bool(new_val: bool):
+async def toggle_bool():
     global bool_val
-    bool_val = new_val
+    if bool_val: bool_val = False
+    else: bool_val = True
+    return {"bool": bool_val}
