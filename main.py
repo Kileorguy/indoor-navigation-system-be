@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from client import fast_mqtt
 from gmqtt import Client as MQTTClient
-from subscribers import signal
+from subscribers import signal, rssi
 import logging
 from routers.signal import  route as signal_route
 
@@ -24,7 +24,7 @@ app.include_router(signal_route)
 
 @fast_mqtt.on_connect()
 def connect(client: MQTTClient, flags: int, rc: int, properties):
-    client.subscribe("things/+/+")
+    # client.subscribe("things/+/+")
     message = ("Connected: ", client, flags, rc, properties)
     logger.info(message)
 

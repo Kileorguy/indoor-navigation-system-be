@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from enum import Enum
 
-class StatusEnum(Enum):
+class StatusEnum(str,Enum):
     PENDING = "PENDING"
     ONGOING = "ONGOING"
     FINISHED = "FINISHED"
@@ -11,7 +11,6 @@ class Coordinate(BaseModel):
     y: float
 
 class CoordinateModel(BaseModel):
-    run_id: int
     status : StatusEnum
     start_point : Coordinate | None
     target_point : Coordinate | None
