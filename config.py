@@ -1,5 +1,7 @@
 from pydantic_settings import BaseSettings
 from fastapi_mqtt import MQTTConfig
+from motor.motor_asyncio import AsyncIOMotorClient
+from urllib.parse import quote_plus
 
 class Settings(BaseSettings):
     mqtt_host: str = "localhost"
@@ -8,12 +10,16 @@ class Settings(BaseSettings):
     mqtt_username: str | None = None
     mqtt_password: str | None = None
 
+    mongo_username: str | None = None
+    mongo_password: str | None = None
+    mongo_host: str | None = None
+    mongo_port: int = 27017
+    mongo_database: str | None = None
+
     class Config:
         env_file = ".env"
 
 settings = Settings()
-print("🔧 Loaded MQTT settings:", settings.model_dump())
-
 
 mqtt_config = MQTTConfig(
     host=settings.mqtt_host,
@@ -22,3 +28,11 @@ mqtt_config = MQTTConfig(
     username=settings.mqtt_username,
     password=settings.mqtt_password,
 )
+
+PASSWORD = quote_plus(settings.mongo_password)
+client = AsyncIOMotorClient(f"mongodb://{settings.mongo_username}:{PASSWORD}@{settings.mongo_host}:{settings.mongo_port}")
+db = client[settings.mongo_database]
+
+# Dependency to get DB
+async def get_database():
+    return db
