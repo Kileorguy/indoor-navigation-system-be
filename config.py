@@ -33,6 +33,5 @@ PASSWORD = quote_plus(settings.mongo_password)
 client = AsyncIOMotorClient(f"mongodb://{settings.mongo_username}:{PASSWORD}@{settings.mongo_host}:{settings.mongo_port}")
 db = client[settings.mongo_database]
 
-# Dependency to get DB
 async def get_database():
     return db
