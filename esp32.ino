@@ -4,12 +4,12 @@
 #define LED_PIN 2
 #define BUTTON_PIN 4
 
-const char* ssid = "aaaaaaaaaaaaaaaaa";
-const char* password = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+const char* ssid = "aaaaaaaaa";
+const char* password = "aaaaaaaaaaaaa";
 
-const char* mqttHost = "192.168.1.2";aa
+const char* mqttHost = "";
 const uint16_t mqttPort = 1883;
-const char* mqttU = "aaaaa";
+const char* mqttU = "aaaaaaa";
 const char* mqttP = "aaaaaaaaaaaaaa";
 
 int lastButtonState = HIGH;
@@ -36,7 +36,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message: ");
   Serial.println(message);
 
-  if (message == "true") {
+  if (message == "True") {
     val = true;
   } else {
     val = false;
@@ -46,7 +46,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 void reconnect() {
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
-    if (client.connect("ESP32Client", "dk", "dkdkdk")) {
+    if (client.connect("ESP32Client", mqttU, mqttP)) {
       Serial.println("connected");
 
       client.subscribe("things/signal");
