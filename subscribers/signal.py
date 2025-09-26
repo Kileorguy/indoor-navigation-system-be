@@ -3,6 +3,7 @@ from typing import Any
 from client import fast_mqtt
 from publish import signal
 
+import globals
 
 import logging
 
@@ -13,8 +14,9 @@ async def toggle(client: MQTTClient, topic: str, payload: bytes, qos: int, prope
     msg = "Toggle Message: ", topic, payload.decode(), qos, properties
 
     logger.info(msg)
-    fast_mqtt.publish("things/signal", payload.decode(), qos=2, retain=True)
+    if payload.decode() == "true": globals.boolean_val = True
+    else : globals.boolean_val = False
 
-    result = await signal.publish_signal(payload.decode())
+    result = await signal.publish_signal()
     logger.info(result)
 

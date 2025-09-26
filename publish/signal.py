@@ -1,8 +1,9 @@
 from client import fast_mqtt
+import globals
 
-async def publish_signal(signal : str):
+async def publish_signal():
     if fast_mqtt.client.is_connected:
-        fast_mqtt.publish("things/signal", signal, qos=2, retain=True)
-        return {"result": signal, "message": "Published"}
+        fast_mqtt.publish("things/signal", globals.boolean_val, qos=2, retain=True)
+        return {"result": globals.boolean_val, "message": "Published"}
     else:
-        return {"result": signal, "message": "MQTT client not connected"}
+        return {"result": globals.boolean_val, "message": "MQTT client not connected"}
