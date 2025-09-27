@@ -71,9 +71,9 @@ async def save_start_rssi(client: MQTTClient, topic: str, payload: bytes, qos: i
 async def save_target_rssi(client: MQTTClient, topic: str, payload: bytes, qos: int, properties: Any):
     payload = json.loads(payload.decode())
 
-    rssi1 = payload["rssi1"]
-    rssi2 = payload["rssi2"]
-    rssi3 = payload["rssi3"]
+    rssi1 = payload["r1"]
+    rssi2 = payload["r2"]
+    rssi3 = payload["r3"]
 
     check, msg = validate_payload(rssi1, rssi2, rssi3)
     if not check:
@@ -114,9 +114,13 @@ async def save_target_rssi(client: MQTTClient, topic: str, payload: bytes, qos: 
 async def save_target_rssi(client: MQTTClient, topic: str, payload: bytes, qos: int, properties: Any):
     payload = json.loads(payload.decode())
 
-    rssi1 = payload["rssi1"]
-    rssi2 = payload["rssi2"]
-    rssi3 = payload["rssi3"]
+    rssi1 = payload["r1"]
+    rssi2 = payload["r2"]
+    rssi3 = payload["r3"]
+
+    ultrasonic1 = payload["u1"]
+    ultrasonic2 = payload["u2"]
+    ultrasonic3 = payload["u3"]
 
     x,y = service.rssi_to_coordinate(rssi1, rssi2, rssi3)
 
@@ -130,9 +134,12 @@ async def save_target_rssi(client: MQTTClient, topic: str, payload: bytes, qos: 
     # res = await service.insert_end_coordinate(coordinate_dto=dto)
     
     await manager.broadcast_json({
-            "type": "rssi_path",
-            "x": x,
-            "y": y,
+        "type": "rssi_path",
+        "x": x,
+        "y": y,
+        "ultrasonic1": ultrasonic1,
+        "ultrasonic2": ultrasonic2,
+        "ultrasonic3": ultrasonic3,
     })
     
     # logger.info(res)
