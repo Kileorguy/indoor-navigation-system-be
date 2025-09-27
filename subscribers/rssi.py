@@ -17,13 +17,13 @@ logger = logging.getLogger("uvicorn")
 async def save_start_rssi(client: MQTTClient, topic: str, payload: bytes, qos: int, properties: Any):
     payload = json.loads(payload.decode())
 
-    rssi1 = payload["rssi1"]
-    rssi2 = payload["rssi2"]
-    rssi3 = payload["rssi3"]
+    rssi1 = payload["r1"]
+    rssi2 = payload["r2"]
+    rssi3 = payload["r3"]
 
-    ultrasonic1 = payload["ultrasonic1"]
-    ultrasonic2 = payload["ultrasonic2"]
-    ultrasonic3 = payload["ultrasonic3"]
+    ultrasonic1 = payload["u1"]
+    ultrasonic2 = payload["u2"]
+    ultrasonic3 = payload["u3"]
 
     logger.debug(f"Ultrasonic: {ultrasonic1}, {ultrasonic2}, {ultrasonic3}")
 
