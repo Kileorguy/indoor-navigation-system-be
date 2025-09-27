@@ -22,6 +22,8 @@ def rssi_to_coordinate(rssi1 : float,
     r2 = rssi_to_dist(rssi2)
     r3 = rssi_to_dist(rssi3)
 
+    logger.error(f"r1: {r1}, r2: {r2}, r3: {r3}") 
+
     x1,y1 = calculateConfig.BEACON1_POS
     x2,y2 = calculateConfig.BEACON2_POS
     x3,y3 = calculateConfig.BEACON3_POS

@@ -6,7 +6,8 @@ from models.coordinate import CoordinateModel, Coordinate, StatusEnum
 from publish import signal
 import logging
 from services import coordinate as service
-
+from helper.validate import validate_payload
+from helper.filter import filter_data
 from config import get_database
 
 logger = logging.getLogger("uvicorn")
@@ -19,6 +20,18 @@ async def save_start_rssi(client: MQTTClient, topic: str, payload: bytes, qos: i
     rssi2 = payload["rssi2"]
     rssi3 = payload["rssi3"]
 
+    check, msg = validate_payload(rssi1, rssi2, rssi3)
+    if not check:
+        logger.error(msg)
+        return
+    else:
+        logger.info(msg)
+
+
+
+    rssi1 = filter_data(rssi1)
+    rssi2 = filter_data(rssi2)
+    rssi3 = filter_data(rssi3)
 
     logger.error(f"{rssi1}, {rssi2}, {rssi3}")
     logger.error(f"{type(rssi1)}, {type(rssi2)}, {type(rssi3)}")
