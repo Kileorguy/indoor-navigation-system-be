@@ -6,8 +6,8 @@ from models.coordinate import CoordinateModel, Coordinate, StatusEnum
 from publish import signal
 import logging
 from services import coordinate as service
-
 from config import get_database
+from ws.ws_manager import manager
 
 logger = logging.getLogger("uvicorn")
 
@@ -32,7 +32,13 @@ async def save_start_rssi(client: MQTTClient, topic: str, payload: bytes, qos: i
         paths=None
     )
 
-    res = await service.insert_start_coordinate(coordinate_dto=dto)
+    # res = await service.insert_start_coordinate(coordinate_dto=dto)
+
+    await manager.broadcast_json({
+        "type": "rssi_start",
+        "x": x,
+        "y": y,
+    })
 
     logger.info(res)
     return
@@ -55,12 +61,13 @@ async def save_target_rssi(client: MQTTClient, topic: str, payload: bytes, qos: 
         paths=None
     )
 
-    res = await service.insert_end_coordinate(coordinate_dto=dto)
-
+    # res = await service.insert_end_coordinate(coordinate_dto=dto)
+    
+    await manager.broadcast_json({
+            "type": "rssi_target",
+            "x": x,
+            "y": y,
+    })
+    
     logger.info(res)
     return
-
-
-
-
-

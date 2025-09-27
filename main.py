@@ -5,8 +5,8 @@ from client import fast_mqtt
 from gmqtt import Client as MQTTClient
 from subscribers import signal, rssi
 import logging
-from routers.signal import  route as signal_route
-
+from routers.signal import route as signal_route
+from routers.ws import route as ws_route
 
 logger = logging.getLogger("uvicorn")
 
@@ -20,7 +20,7 @@ async def lifespan(app_: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 app.include_router(signal_route)
-
+app.include_router(ws_route)
 
 @fast_mqtt.on_connect()
 def connect(client: MQTTClient, flags: int, rc: int, properties):
