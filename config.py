@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
 
-class CalculationConfig(BaseSettings):
+class CalculationConfig:
     TX_POWER: int = 3
     PATH_LOSS_EXPONENT: int = 2 #n
     BEACON1_POS = (0,0)
