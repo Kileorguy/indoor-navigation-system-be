@@ -6,6 +6,8 @@ from models.coordinate import CoordinateModel, Coordinate, StatusEnum
 from publish import signal
 import logging
 from services import coordinate as service
+from helper.validate import validate_payload
+from helper.filter import filter_data
 from config import get_database
 from ws.ws_manager import manager
 
@@ -19,6 +21,18 @@ async def save_start_rssi(client: MQTTClient, topic: str, payload: bytes, qos: i
     rssi2 = payload["rssi2"]
     rssi3 = payload["rssi3"]
 
+    check, msg = validate_payload(rssi1, rssi2, rssi3)
+    if not check:
+        logger.error(msg)
+        return
+    else:
+        logger.info(msg)
+
+
+
+    rssi1 = filter_data(rssi1)
+    rssi2 = filter_data(rssi2)
+    rssi3 = filter_data(rssi3)
 
     logger.error(f"{rssi1}, {rssi2}, {rssi3}")
     logger.error(f"{type(rssi1)}, {type(rssi2)}, {type(rssi3)}")
@@ -32,7 +46,7 @@ async def save_start_rssi(client: MQTTClient, topic: str, payload: bytes, qos: i
         paths=None
     )
 
-    # res = await service.insert_start_coordinate(coordinate_dto=dto)
+    res = await service.insert_start_coordinate(coordinate_dto=dto)
 
     await manager.broadcast_json({
         "type": "rssi_start",
@@ -52,6 +66,20 @@ async def save_target_rssi(client: MQTTClient, topic: str, payload: bytes, qos: 
     rssi2 = payload["rssi2"]
     rssi3 = payload["rssi3"]
 
+    check, msg = validate_payload(rssi1, rssi2, rssi3)
+    if not check:
+        logger.error(msg)
+        return
+    else:
+        logger.info(msg)
+
+    rssi1 = filter_data(rssi1)
+    rssi2 = filter_data(rssi2)
+    rssi3 = filter_data(rssi3)
+
+    logger.error(f"{rssi1}, {rssi2}, {rssi3}")
+    logger.error(f"{type(rssi1)}, {type(rssi2)}, {type(rssi3)}")
+
     x,y = service.rssi_to_coordinate(rssi1, rssi2, rssi3)
 
     dto = CoordinateModel(
@@ -61,13 +89,13 @@ async def save_target_rssi(client: MQTTClient, topic: str, payload: bytes, qos: 
         paths=None
     )
 
-    # res = await service.insert_end_coordinate(coordinate_dto=dto)
-    
+    res = await service.insert_end_coordinate(coordinate_dto=dto)
+
     await manager.broadcast_json({
             "type": "rssi_target",
             "x": x,
             "y": y,
     })
-    
+
     logger.info(res)
     return
