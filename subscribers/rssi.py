@@ -111,7 +111,7 @@ async def save_target_rssi(client: MQTTClient, topic: str, payload: bytes, qos: 
 
 
 @fast_mqtt.subscribe("things/rssi/path", qos=0)
-async def save_target_rssi(client: MQTTClient, topic: str, payload: bytes, qos: int, properties: Any):
+async def save_path_rssi(client: MQTTClient, topic: str, payload: bytes, qos: int, properties: Any):
     payload = json.loads(payload.decode())
 
     rssi1 = payload["r1"]
@@ -121,6 +121,10 @@ async def save_target_rssi(client: MQTTClient, topic: str, payload: bytes, qos: 
     ultrasonic1 = payload["u1"]
     ultrasonic2 = payload["u2"]
     ultrasonic3 = payload["u3"]
+
+    rssi1 = filter_data(rssi1)
+    rssi2 = filter_data(rssi2)
+    rssi3 = filter_data(rssi3)
 
     x,y = service.rssi_to_coordinate(rssi1, rssi2, rssi3)
 
