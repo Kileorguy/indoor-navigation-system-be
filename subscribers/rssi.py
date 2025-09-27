@@ -25,6 +25,8 @@ async def save_start_rssi(client: MQTTClient, topic: str, payload: bytes, qos: i
     ultrasonic2 = payload["ultrasonic2"]
     ultrasonic3 = payload["ultrasonic3"]
 
+    logger.debug(f"Ultrasonic: {ultrasonic1}, {ultrasonic2}, {ultrasonic3}")
+
     # check, msg = validate_payload(rssi1, rssi2, rssi3)
     # if not check:
     #     logger.error(msg)
@@ -133,5 +135,5 @@ async def save_target_rssi(client: MQTTClient, topic: str, payload: bytes, qos: 
             "y": y,
     })
     
-    logger.info(res)
+    # logger.info(res)
     return
