@@ -9,6 +9,7 @@ from services import coordinate as service
 from helper.validate import validate_payload
 from helper.filter import filter_data
 from config import get_database
+from ws.ws_manager import manager
 
 logger = logging.getLogger("uvicorn")
 
@@ -47,6 +48,12 @@ async def save_start_rssi(client: MQTTClient, topic: str, payload: bytes, qos: i
 
     res = await service.insert_start_coordinate(coordinate_dto=dto)
 
+    await manager.broadcast_json({
+        "type": "rssi_start",
+        "x": x,
+        "y": y,
+    })
+
     logger.info(res)
     return
 
@@ -70,10 +77,11 @@ async def save_target_rssi(client: MQTTClient, topic: str, payload: bytes, qos: 
 
     res = await service.insert_end_coordinate(coordinate_dto=dto)
 
+    await manager.broadcast_json({
+            "type": "rssi_target",
+            "x": x,
+            "y": y,
+    })
+
     logger.info(res)
     return
-
-
-
-
-
