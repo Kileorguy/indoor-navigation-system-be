@@ -1,5 +1,5 @@
 from typing import Tuple
-
+from config import CalculationConfig
 from fastapi import Depends
 
 from config import get_database
@@ -7,12 +7,45 @@ from models.coordinate import CoordinateModel
 import logging
 
 logger = logging.getLogger("uvicorn")
+calculateConfig = CalculationConfig()
+
+def rssi_to_dist(rssi):
+    return 10**((calculateConfig.TX_POWER-rssi)/(10*calculateConfig.PATH_LOSS_EXPONENT))
+
 
 def rssi_to_coordinate(rssi1 : float,
                              rssi2 : float,
                              rssi3 :float ) -> Tuple[float,float]:
     """Function buat convert RSSI jadi 2D Coordinate"""
-    return rssi1, rssi2
+
+    r1 = rssi_to_dist(rssi1)
+    r2 = rssi_to_dist(rssi2)
+    r3 = rssi_to_dist(rssi3)
+
+    x1,y1 = calculateConfig.BEACON1_POS
+    x2,y2 = calculateConfig.BEACON2_POS
+    x3,y3 = calculateConfig.BEACON3_POS
+
+    A = 2 * (x2 - x1)
+    B = 2 * (y2 - y1)
+    C = r1 ** 2 - r2 ** 2 - x1 ** 2 + x2 ** 2 - y1 ** 2 + y2 ** 2
+
+    D = 2 * (x3 - x2)
+    E = 2 * (y3 - y2)
+    F = r2 ** 2 - r3 ** 2 - x2 ** 2 + x3 ** 2 - y2 ** 2 + y3 ** 2
+
+    denom = A * E - B * D
+    if denom == 0:
+        logger.error("Collinear anchors, cannot compute position.")
+        raise ValueError("Anchors are collinear, cannot compute position.")
+
+    x = (C * E - B * F) / denom
+    y = (A * F - C * D) / denom
+
+    return x, y
+
+
+
 
 async def insert_start_coordinate(coordinate_dto: CoordinateModel) -> str:
     db = await get_database()

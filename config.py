@@ -19,6 +19,14 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
 
+class CalculationConfig(BaseSettings):
+    TX_POWER: int = 3
+    PATH_LOSS_EXPONENT: int = 2 #n
+    BEACON1_POS = (0,0)
+    BEACON2_POS = (5,5)
+    BEACON3_POS = (2,10)
+
+calculate_config = CalculationConfig()
 settings = Settings()
 
 mqtt_config = MQTTConfig(
@@ -35,3 +43,4 @@ db = client[settings.mongo_database]
 
 async def get_database():
     return db
+
