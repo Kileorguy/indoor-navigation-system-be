@@ -15,12 +15,12 @@ async def save_start_rssi(client: MQTTClient, topic: str, payload: bytes, qos: i
     ultrasonic2 = payload["ultrasonic2"]
     ultrasonic3 = payload["ultrasonic3"]
 
-    await manager.broadcast_json({
-        "type": "ultrasonic",
-        "ultrasonic1": ultrasonic1,
-        "ultrasonic2": ultrasonic2,
-        "ultrasonic3": ultrasonic3,
-    })
+    # await manager.broadcast_json({
+    #     "type": "ultrasonic",
+    #     "ultrasonic1": ultrasonic1,
+    #     "ultrasonic2": ultrasonic2,
+    #     "ultrasonic3": ultrasonic3,
+    # })
 
     logger.info("Ultrasonic data sent to websocket")
 
