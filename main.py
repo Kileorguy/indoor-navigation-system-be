@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from client import fast_mqtt
 from gmqtt import Client as MQTTClient
-from subscribers import signal, rssi
+from subscribers import signal, rssi, ultrasonic
 import logging
 from routers.signal import route as signal_route
 from routers.ws import route as ws_route
