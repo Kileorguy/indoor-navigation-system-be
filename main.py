@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from client import fast_mqtt
 from gmqtt import Client as MQTTClient
 from subscribers import signal, rssi, ultrasonic
@@ -19,6 +20,16 @@ async def lifespan(app_: FastAPI):
     yield
     await fast_mqtt.mqtt_shutdown()
 app = FastAPI(lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://148.230.101.206:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],  
+    allow_headers=["*"], 
+)
 
 app.include_router(signal_route)
 app.include_router(ws_route)
