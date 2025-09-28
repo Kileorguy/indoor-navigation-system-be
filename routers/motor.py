@@ -12,10 +12,10 @@ route = APIRouter(
 )
 
 class Item(BaseModel):
-    description: str
+    direction: str
     enable: bool
 
 @route.post("/drive")
 async def drive_motor(item: Item):
-    result = await motor.publish_motor(item.description, item.enable)
+    result = await motor.publish_motor(item.direction, item.enable)
     return JSONResponse(content=result, status_code=200)
