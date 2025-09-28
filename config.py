@@ -21,12 +21,20 @@ class Settings(BaseSettings):
 
 class CalculationConfig:
     TX_POWER: int = -83
+    TX_POWER1: int = -83
+    TX_POWER2: int = -83
+    TX_POWER3: int = -83
     PATH_LOSS_EXPONENT: int = 4    #n
     BEACON1_POS = (0,0)
-    BEACON2_POS = (5,5)
-    BEACON3_POS = (2,10)
+    BEACON2_POS = (1,3)
+    BEACON3_POS = (3,1)
+
+class MotorConfig:
+    FORWARD_UNIT : int = 100
+    TURN90DEG_UNIT : int = 100
 
 calculate_config = CalculationConfig()
+motor_config = MotorConfig()
 settings = Settings()
 
 mqtt_config = MQTTConfig(
