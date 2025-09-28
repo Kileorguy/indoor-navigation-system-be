@@ -7,6 +7,7 @@ from subscribers import signal, rssi, ultrasonic
 import logging
 from routers.signal import route as signal_route
 from routers.ws import route as ws_route
+from routers.motor import route as motor_route
 
 logger = logging.getLogger("uvicorn")
 
@@ -21,6 +22,7 @@ app = FastAPI(lifespan=lifespan)
 
 app.include_router(signal_route)
 app.include_router(ws_route)
+app.include_router(motor_route)
 
 @fast_mqtt.on_connect()
 def connect(client: MQTTClient, flags: int, rc: int, properties):
