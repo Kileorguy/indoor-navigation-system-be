@@ -44,6 +44,9 @@ def rssi_to_coordinate(rssi1 : float,
     x = (C * E - B * F) / denom
     y = (A * F - C * D) / denom
 
+    x = x or -1
+    y = y or -1
+
     return x, y
 
 

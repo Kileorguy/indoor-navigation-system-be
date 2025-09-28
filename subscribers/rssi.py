@@ -128,6 +128,7 @@ async def save_path_rssi(client: MQTTClient, topic: str, payload: bytes, qos: in
 
     x,y = service.rssi_to_coordinate(rssi1, rssi2, rssi3)
 
+
     dto = CoordinateModel(
         start_point=None,
         status=StatusEnum.PENDING,
