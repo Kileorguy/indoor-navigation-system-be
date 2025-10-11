@@ -7,6 +7,7 @@ import logging
 
 logger = logging.getLogger("uvicorn")
 
+# code testing
 @fast_mqtt.subscribe("things/ultrasonic", qos=0)
 async def save_start_rssi(client: MQTTClient, topic: str, payload: bytes, qos: int, properties: Any):
     payload = json.loads(payload.decode())

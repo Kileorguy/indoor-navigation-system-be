@@ -3,7 +3,6 @@ from gmqtt import Client as MQTTClient
 from typing import Any
 from client import fast_mqtt
 from models.coordinate import CoordinateModel, Coordinate, StatusEnum
-from publish import signal
 import logging
 from services import coordinate as service
 from helper.validate import validate_payload
@@ -13,6 +12,9 @@ from ws.ws_manager import manager
 
 logger = logging.getLogger("uvicorn")
 
+"""
+subscriber mqtt untuk menentukan start position
+"""
 @fast_mqtt.subscribe("things/rssi/start", qos=0)
 async def save_start_rssi(client: MQTTClient, topic: str, payload: bytes, qos: int, properties: Any):
     payload = json.loads(payload.decode())
@@ -66,7 +68,9 @@ async def save_start_rssi(client: MQTTClient, topic: str, payload: bytes, qos: i
     logger.info(res)
     return
 
-
+"""
+subscriber mqtt untuk menentukan target position
+"""
 @fast_mqtt.subscribe("things/rssi/target", qos=0)
 async def save_target_rssi(client: MQTTClient, topic: str, payload: bytes, qos: int, properties: Any):
     payload = json.loads(payload.decode())
@@ -109,7 +113,9 @@ async def save_target_rssi(client: MQTTClient, topic: str, payload: bytes, qos: 
     logger.info(res)
     return
 
-
+"""
+subscriber mqtt untuk mendapatkan historical data path device
+"""
 @fast_mqtt.subscribe("things/rssi/path", qos=0)
 async def save_path_rssi(client: MQTTClient, topic: str, payload: bytes, qos: int, properties: Any):
     payload = json.loads(payload.decode())

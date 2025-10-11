@@ -2,6 +2,9 @@ import json
 from typing import Set
 from fastapi import WebSocket
 
+"""
+class untuk inisialisasi websocket
+"""
 class ConnectionManager:
     def __init__(self):
         self.clients: Set[WebSocket] = set()

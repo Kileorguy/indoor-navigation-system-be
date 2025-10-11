@@ -15,6 +15,9 @@ class Item(BaseModel):
     direction: str
     enable: bool
 
+"""
+api post untuk publish arah gerak motor
+"""
 @route.post("/drive")
 async def drive_motor(item: Item):
     result = await motor.publish_motor(item.direction, item.enable)

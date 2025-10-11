@@ -9,10 +9,16 @@ import logging
 logger = logging.getLogger("uvicorn")
 calculateConfig = CalculationConfig()
 
+"""
+untuk menngubah rssi menjadi jarak
+"""
 def rssi_to_dist(rssi):
     return 10**((calculateConfig.TX_POWER-rssi)/(10*calculateConfig.PATH_LOSS_EXPONENT))
 
 
+"""
+untuk menngubah rssi menjadi coordinate
+"""
 def rssi_to_coordinate(rssi1 : float,
                              rssi2 : float,
                              rssi3 :float ) -> Tuple[float,float]:

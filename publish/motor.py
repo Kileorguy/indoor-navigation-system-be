@@ -5,6 +5,9 @@ import logging
 
 logger = logging.getLogger("uvicorn")
 
+"""
+function untuk publish navigasi motor
+"""
 async def publish_motor(direction : str, enable : bool):
     if fast_mqtt.client.is_connected:
         fast_mqtt.publish("things/motor/", {

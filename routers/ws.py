@@ -5,6 +5,9 @@ import json
 from handlers import ws_handler as handler
 route = APIRouter()
 
+"""
+endopoint untuk websocket
+"""
 @route.websocket("/ws")
 async def ws_endpoint(ws: WebSocket):
     await manager.connect(ws)
