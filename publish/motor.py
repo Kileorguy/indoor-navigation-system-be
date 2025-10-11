@@ -1,7 +1,9 @@
 from client import fast_mqtt
 import globals
 from config import motor_config
+import logging
 
+logger = logging.getLogger("uvicorn")
 
 async def publish_motor(direction : str, enable : bool):
     if fast_mqtt.client.is_connected:
