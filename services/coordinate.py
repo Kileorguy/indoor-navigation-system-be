@@ -159,12 +159,34 @@ async def insert_end_coordinate(coordinate_dto: CoordinateModel) -> str:
 
 async def start_navigation() -> str:
 
-    db = await get_database()
 
-    result = await db.coordinate.update_one(
-        {"status": "PENDING"},
-        {"$set": {"status": "ONGOING"}},
-    )
+    try:
+
+        db = await get_database()
+
+        if await db.coordinate.count_documents({"status": "ONGOING"}) > 0:
+            return "There is ongoing orders, cannot start new"
+
+        elif await db.coordinate.count_documents({"status": "PENDING"}) == 0:
+            return "There is no pending orders, please insert start and end point"
+
+
+        elif await db.coordinate.find_one({
+            "status": "PENDING",
+            "$or": [
+                {"start_point": {"$exists": False}},
+                {"target_point": {"$exists": False}}
+            ]
+        }) is not None:
+            return "Startpoint or endpoint not defined, cannot start navigation"
+
+        result = await db.coordinate.update_one(
+            {"status": "PENDING"},
+            {"$set": {"status": "ONGOING"}},
+        )
+
+    except Exception as e:
+        return f"Error: {e}"
 
     return "Status changed into ongoing"
 

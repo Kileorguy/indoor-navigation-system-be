@@ -24,9 +24,9 @@ async def start_navigation():
         await start_nav()
         logger.debug("Start Navigation")
         result = await coordinate_service.start_navigation()
-        logger.debug(result)
+        logger.error(result)
 
-        return JSONResponse(content={"message": "Navigation started"}, status_code=200)
+        return JSONResponse(content={"message": result}, status_code=200)
     except Exception as e:
 
         logger.error("Error in /rssi/start/")
