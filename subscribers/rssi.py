@@ -34,8 +34,6 @@ async def save_start_rssi(client: MQTTClient, topic: str, payload: bytes, qos: i
     logger.debug(f"Ultrasonic: {ultrasonic1}, {ultrasonic2}, {ultrasonic3}")
 
 
-    start_log = LogModel(status=LogEnum.ACTIVITY, text="Start navigation")
-    await insert_logs_data(start_log)
     # check, msg = validate_payload(rssi1, rssi2, rssi3)
     # if not check:
     #     logger.error(msg)
@@ -80,6 +78,7 @@ subscriber mqtt untuk menentukan target position
 """
 @fast_mqtt.subscribe("things/rssi/target", qos=0)
 async def save_target_rssi(client: MQTTClient, topic: str, payload: bytes, qos: int, properties: Any):
+    pass
     payload = json.loads(payload.decode())
 
     rssi1 = payload["r1"]

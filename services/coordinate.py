@@ -156,3 +156,25 @@ async def insert_end_coordinate(coordinate_dto: CoordinateModel) -> str:
         return f"Updated existing, Data : , ${result}"
     else:
         return "Nothing Changed"
+
+async def start_navigation() -> str:
+
+    db = await get_database()
+
+    result = await db.coordinate.update_one(
+        {"status": "PENDING"},
+        {"$set": {"status": "ONGOING"}},
+    )
+
+    return "Status changed into ongoing"
+
+async def end_navigation() -> str:
+    db = await get_database()
+
+    result = await db.coordinate.update_one(
+        {"status": "ONGOING"},
+        {"$set": {"status": "FINISHED"}},
+    )
+
+    return "Status changed into finished"
+

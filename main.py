@@ -8,7 +8,7 @@ from subscribers import rssi, ultrasonic, ble_sample_data
 import logging
 from routers.ws import route as ws_route
 from routers.motor import route as motor_route
-from routers.navigation import route as navigation_route
+from routers.rssi import route as navigation_route
 
 # setup logger buat ngeprint info ke terminal
 logger = logging.getLogger("uvicorn")
