@@ -1,9 +1,9 @@
 from pydantic import BaseModel
-from coordinate import TypeEnum
+from coordinate import StatusEnum
 
 class RSSI(BaseModel):
     id: int
-    type: TypeEnum
+    type: StatusEnum
     rssi1: float
     rssi2 : float
     rssi3 : float

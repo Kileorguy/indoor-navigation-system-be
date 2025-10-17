@@ -9,6 +9,8 @@ from helper.validate import validate_payload
 from helper.filter import filter_data
 from config import get_database
 from ws.ws_manager import manager
+from services.raw_rssi import insert_raw_rssi_data
+from models.raw_rssi import RawRSSI
 
 logger = logging.getLogger("uvicorn")
 
@@ -123,6 +125,16 @@ async def save_path_rssi(client: MQTTClient, topic: str, payload: bytes, qos: in
     rssi1 = payload["r1"]
     rssi2 = payload["r2"]
     rssi3 = payload["r3"]
+
+    raw_rssi_dto = RawRSSI(
+        rssi1=rssi1,
+        rssi2=rssi2,
+        rssi3=rssi3,
+    )
+
+    result = await insert_raw_rssi_data(raw_rssi_dto)
+    # logger.error("RAW RSSI "+ result)
+
 
     ultrasonic1 = payload["u1"]
     ultrasonic2 = payload["u2"]
