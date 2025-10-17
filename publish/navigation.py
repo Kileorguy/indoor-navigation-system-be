@@ -17,7 +17,7 @@ async def start_navigation(x:int, y:int):
         fast_mqtt.publish("navigation/start/", {
             "x": x,
             "y": y
-        }, qos=2, retain=True)
+        }, qos=2, retain=False)
 
         start_log = LogModel(status=LogEnum.ACTIVITY, text="Start navigation")
 
