@@ -20,11 +20,12 @@ class Settings(BaseSettings):
         env_file = ".env"
 
 class CalculationConfig:
-    TX_POWER: int = -83
-    TX_POWER1: int = -83
-    TX_POWER2: int = -83
-    TX_POWER3: int = -83
-    PATH_LOSS_EXPONENT: int = 4    #n
+    TX_POWER1: int = -70.16794738830454
+    TX_POWER2: int = -67.09791779237294
+    TX_POWER3: int = -63.82524304918069
+    PATH_LOSS_EXPONENT1: int = 4.085764005566974   #n
+    PATH_LOSS_EXPONENT2: int = 5.097879276404685   #n
+    PATH_LOSS_EXPONENT3: int = 6.063730648004541   #n
     BEACON1_POS = (0,0)
     BEACON2_POS = (1,3)
     BEACON3_POS = (3,1)

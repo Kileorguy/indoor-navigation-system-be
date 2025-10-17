@@ -12,8 +12,8 @@ calculateConfig = CalculationConfig()
 """
 untuk menngubah rssi menjadi jarak
 """
-def rssi_to_dist(rssi):
-    return 10**((calculateConfig.TX_POWER-rssi)/(10*calculateConfig.PATH_LOSS_EXPONENT))
+def rssi_to_dist(rssi, TX_POWER, PATH_LOSS_EXPONENT):
+    return 10**((TX_POWER-rssi)/(10*PATH_LOSS_EXPONENT))
 
 
 """
@@ -24,9 +24,9 @@ def rssi_to_coordinate(rssi1 : float,
                              rssi3 :float ) -> Tuple[float,float]:
     """Function buat convert RSSI jadi 2D Coordinate"""
 
-    r1 = rssi_to_dist(rssi1)
-    r2 = rssi_to_dist(rssi2)
-    r3 = rssi_to_dist(rssi3)
+    r1 = rssi_to_dist(rssi1, calculateConfig.TX_POWER1, calculateConfig.PATH_LOSS_EXPONENT1)
+    r2 = rssi_to_dist(rssi2, calculateConfig.TX_POWER2, calculateConfig.PATH_LOSS_EXPONENT2)
+    r3 = rssi_to_dist(rssi3, calculateConfig.TX_POWER3, calculateConfig.PATH_LOSS_EXPONENT3)
 
     logger.error(f"r1: {r1}, r2: {r2}, r3: {r3}") 
 
