@@ -8,6 +8,7 @@ from subscribers import rssi, ultrasonic, ble_sample_data
 import logging
 from routers.ws import route as ws_route
 from routers.motor import route as motor_route
+from routers.navigation import route as navigation_route
 
 # setup logger buat ngeprint info ke terminal
 logger = logging.getLogger("uvicorn")
@@ -28,6 +29,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://148.230.101.206:5173",
+        "http://localhost:5173",
     ],
     allow_credentials=True,
     allow_methods=["*"],  
@@ -37,6 +39,7 @@ app.add_middleware(
 # include semua router dari folder routers
 app.include_router(ws_route)
 app.include_router(motor_route)
+app.include_router(navigation_route)
 
 # event pas mqtt connect ke broker
 @fast_mqtt.on_connect()
