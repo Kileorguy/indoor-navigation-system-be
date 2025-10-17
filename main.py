@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from client import fast_mqtt
 from gmqtt import Client as MQTTClient
-from subscribers import rssi, ultrasonic, ble_sample_data
+from subscribers import rssi, ultrasonic, ble_sample_data, navigation
 import logging
 from routers.ws import route as ws_route
 from routers.motor import route as motor_route

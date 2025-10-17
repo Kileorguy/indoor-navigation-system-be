@@ -193,7 +193,7 @@ async def start_navigation() -> str:
 async def end_navigation() -> str:
     db = await get_database()
 
-    result = await db.coordinate.update_one(
+    _ = await db.coordinate.update_one(
         {"status": "ONGOING"},
         {"$set": {"status": "FINISHED"}},
     )
