@@ -9,4 +9,3 @@ class RawRSSI(BaseModel):
     rssi3 : list[float]
     timestamp: datetime = Field(default_factory=lambda: datetime.now(tz=GMT_PLUS_7)
 )
-

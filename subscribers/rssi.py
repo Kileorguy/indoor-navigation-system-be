@@ -11,6 +11,8 @@ from config import get_database
 from ws.ws_manager import manager
 from services.raw_rssi import insert_raw_rssi_data
 from models.raw_rssi import RawRSSI
+from models.log import Log as LogModel, StatusEnum as LogEnum
+from services.logs import insert_logs_data
 
 logger = logging.getLogger("uvicorn")
 
@@ -31,6 +33,9 @@ async def save_start_rssi(client: MQTTClient, topic: str, payload: bytes, qos: i
 
     logger.debug(f"Ultrasonic: {ultrasonic1}, {ultrasonic2}, {ultrasonic3}")
 
+
+    start_log = LogModel(status=LogEnum.ACTIVITY, text="Start navigation")
+    await insert_logs_data(start_log)
     # check, msg = validate_payload(rssi1, rssi2, rssi3)
     # if not check:
     #     logger.error(msg)
@@ -132,7 +137,7 @@ async def save_path_rssi(client: MQTTClient, topic: str, payload: bytes, qos: in
         rssi3=rssi3,
     )
 
-    result = await insert_raw_rssi_data(raw_rssi_dto)
+    _ = await insert_raw_rssi_data(raw_rssi_dto)
     # logger.error("RAW RSSI "+ result)
 
 
