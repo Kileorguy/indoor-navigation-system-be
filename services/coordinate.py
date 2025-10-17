@@ -1,10 +1,15 @@
 from typing import Tuple
+
+from math import floor
+
 from config import CalculationConfig
 from fastapi import Depends
 
 from config import get_database
 from models.coordinate import CoordinateModel
 import logging
+from publish.navigation import start_navigation as publish_nav
+
 
 logger = logging.getLogger("uvicorn")
 calculateConfig = CalculationConfig()
@@ -157,18 +162,35 @@ async def insert_end_coordinate(coordinate_dto: CoordinateModel) -> str:
     else:
         return "Nothing Changed"
 
-async def start_navigation() -> str:
 
+async def insert_path(path_dto: CoordinateModel):
+    db = await get_database()
+
+    try:
+        curr_data = db.find_one({"status": "ONGOING"})
+        if curr_data is None:
+            logger.error("No ongoing order found")
+            return
+    except Exception as e:
+        logger.error(f"Error: {e}")
+        return
+
+    logger.error(curr_data)
+
+
+
+
+async def start_navigation() -> {int,int}:
 
     try:
 
         db = await get_database()
 
         if await db.coordinate.count_documents({"status": "ONGOING"}) > 0:
-            return "There is ongoing orders, cannot start new"
+            logger.error( "There is ongoing orders, cannot start new")
 
         elif await db.coordinate.count_documents({"status": "PENDING"}) == 0:
-            return "There is no pending orders, please insert start and end point"
+            logger.error( "There is no pending orders, please insert start and end point")
 
 
         elif await db.coordinate.find_one({
@@ -178,17 +200,22 @@ async def start_navigation() -> str:
                 {"target_point": {"$exists": False}}
             ]
         }) is not None:
-            return "Startpoint or endpoint not defined, cannot start navigation"
+            logger.error( "Startpoint or endpoint not defined, cannot start navigation")
 
         result = await db.coordinate.update_one(
             {"status": "PENDING"},
             {"$set": {"status": "ONGOING"}},
         )
 
-    except Exception as e:
-        return f"Error: {e}"
 
-    return "Status changed into ongoing"
+        result = await db.coordinate.find_one({"status": "ONGOING"})
+        logger.error(f"Result: {result}")
+        return floor(result["target_point"]["x"]*10), floor(result["target_point"]["y"]*10)
+
+    except Exception as e:
+        logger.error(f"Error: {e}")
+
+    return -1,-1
 
 async def end_navigation() -> str:
     db = await get_database()

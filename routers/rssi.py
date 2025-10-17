@@ -21,12 +21,13 @@ api untuk melakukan start pathfinding dan navigation
 async def start_navigation():
 
     try:
-        await start_nav()
         logger.debug("Start Navigation")
-        result = await coordinate_service.start_navigation()
-        logger.error(result)
+        x,y = await coordinate_service.start_navigation()
+        logger.error(f"x: {x}, y: {y}")
+        if x!=-1 and y!=-1:
+            await start_nav(x,y)
 
-        return JSONResponse(content={"message": result}, status_code=200)
+        return JSONResponse(content={"message": "Start Processed"}, status_code=200)
     except Exception as e:
 
         logger.error("Error in /rssi/start/")

@@ -11,11 +11,12 @@ logger = logging.getLogger("uvicorn")
 """
 function untuk publish navigasi motor
 """
-async def start_navigation():
+async def start_navigation(x:int, y:int):
 
     if fast_mqtt.client.is_connected:
         fast_mqtt.publish("navigation/start/", {
-            "start": True
+            "x": x,
+            "y": y
         }, qos=2, retain=True)
 
         start_log = LogModel(status=LogEnum.ACTIVITY, text="Start navigation")
@@ -23,6 +24,6 @@ async def start_navigation():
         await insert_logs_data(start_log)
 
 
-        return {"result": globals.boolean_val, "message": "Published"}
+        return {"message": "Published"}
     else:
-        return {"result": globals.boolean_val, "message": "MQTT client not connected"}
+        return {"message": "MQTT client not connected"}

@@ -158,7 +158,7 @@ async def save_path_rssi(client: MQTTClient, topic: str, payload: bytes, qos: in
         paths=None
     )
 
-    # res = await service.insert_end_coordinate(coordinate_dto=dto)
+    await service.insert_path(path_dto=dto)
     
     await manager.broadcast_json({
         "type": "rssi_path",
@@ -171,3 +171,4 @@ async def save_path_rssi(client: MQTTClient, topic: str, payload: bytes, qos: in
     
     # logger.info(res)
     return
+
