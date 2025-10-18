@@ -4,8 +4,9 @@ from fastapi.responses import JSONResponse
 from services import coordinate as coordinate_service
 from pydantic import BaseModel
 from models.coordinate import CoordinateModel, Coordinate, StatusEnum
-
+from helper import discord_webhook
 import logging
+
 route = APIRouter(
     prefix="/rssi",
     tags=["rssi"],
@@ -26,6 +27,7 @@ async def start_navigation():
         logger.error(f"x: {x}, y: {y}")
         if x!=-1 and y!=-1:
             await start_nav(x,y)
+            await discord_webhook.send_discord_alert(f"🟢 The car has started moving from coordinate ({x}, {y})")
 
         return JSONResponse(content={"message": "Start Processed"}, status_code=200)
     except Exception as e:
