@@ -21,7 +21,7 @@ async def start_navigation(x:int, y:int):
 
         start_log = LogModel(status=LogEnum.ACTIVITY, text="Start navigation")
 
-        await insert_logs_data(start_log)
+        await   insert_logs_data(start_log)
 
 
         return {"message": "Published"}
