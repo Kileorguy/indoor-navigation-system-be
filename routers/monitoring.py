@@ -48,7 +48,6 @@ async def get_monitoring_data(date: str = Query(..., description="Date in format
                 ObjectId: str
             }
         )
-        logger.error(data)
 
         return JSONResponse(content={"data": data}, status_code=200)
 
