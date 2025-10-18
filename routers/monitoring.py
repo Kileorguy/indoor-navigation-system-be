@@ -51,6 +51,7 @@ async def get_monitoring_data(date: str = Query(..., description="Date in format
 
         return JSONResponse(content={"data": data}, status_code=200)
 
-    except ValueError:
-        return JSONResponse(content={"error": "Invalid date format. Expected YYYY-MM-DD."}, status_code=400)
+    except Exception as e:
+        logger.error(f"Error in /monitoring/get_monitoring_data: {e}")
+        return JSONResponse(content={"error": "Internal server error"}, status_code=400)
 
