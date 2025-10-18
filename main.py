@@ -9,6 +9,8 @@ import logging
 from routers.ws import route as ws_route
 from routers.motor import route as motor_route
 from routers.rssi import route as navigation_route
+from routers.monitoring import route as monitoring_route
+from routers.logs import route as logs_route
 
 # setup logger buat ngeprint info ke terminal
 logger = logging.getLogger("uvicorn")
@@ -40,6 +42,8 @@ app.add_middleware(
 app.include_router(ws_route)
 app.include_router(motor_route)
 app.include_router(navigation_route)
+app.include_router(monitoring_route)
+app.include_router(logs_route)
 
 # event pas mqtt connect ke broker
 @fast_mqtt.on_connect()

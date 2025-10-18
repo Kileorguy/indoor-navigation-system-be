@@ -17,5 +17,9 @@ async def insert_raw_rssi_data(raw_rssi_dto: RawRSSI):
     raw_rssi_json["mean1"] = np.mean(raw_rssi_json['rssi1'])
     raw_rssi_json["mean2"] = np.mean(raw_rssi_json['rssi2'])
     raw_rssi_json["mean3"] = np.mean(raw_rssi_json['rssi3'])
+
+    raw_rssi_json["median1"] = np.median(raw_rssi_json['rssi1'])
+    raw_rssi_json["median2"] = np.median(raw_rssi_json['rssi2'])
+    raw_rssi_json["median3"] = np.median(raw_rssi_json['rssi3'])
     result = await db.raw_rssi.insert_one(raw_rssi_json)
     return result
