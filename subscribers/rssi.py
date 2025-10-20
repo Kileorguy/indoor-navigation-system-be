@@ -31,15 +31,17 @@ async def save_start_rssi(client: MQTTClient, topic: str, payload: bytes, qos: i
     ultrasonic2 = payload["u2"]
     ultrasonic3 = payload["u3"]
 
+
+
     logger.debug(f"Ultrasonic: {ultrasonic1}, {ultrasonic2}, {ultrasonic3}")
 
 
-    # check, msg = validate_payload(rssi1, rssi2, rssi3)
-    # if not check:
-    #     logger.error(msg)
-    #     return
-    # else:
-    #     logger.info(msg)
+    check, msg = validate_payload(rssi1, rssi2, rssi3)
+    if not check:
+        logger.error(msg)
+        return
+    else:
+        logger.info(msg)
 
 
 
@@ -136,6 +138,7 @@ async def save_path_rssi(client: MQTTClient, topic: str, payload: bytes, qos: in
         rssi3=rssi3,
     )
 
+
     _ = await insert_raw_rssi_data(raw_rssi_dto)
     # logger.error("RAW RSSI "+ result)
 
@@ -147,6 +150,13 @@ async def save_path_rssi(client: MQTTClient, topic: str, payload: bytes, qos: in
     rssi1 = filter_data(rssi1)
     rssi2 = filter_data(rssi2)
     rssi3 = filter_data(rssi3)
+
+    check, msg = validate_payload(rssi1, rssi2, rssi3)
+    if not check:
+        logger.error(msg)
+        return
+    else:
+        logger.info(msg)
 
     x,y = service.rssi_to_coordinate(rssi1, rssi2, rssi3)
 
