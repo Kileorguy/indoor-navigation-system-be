@@ -27,7 +27,7 @@ async def start_navigation():
         logger.error(f"x: {x}, y: {y}")
         if x!=-1 and y!=-1:
             await start_nav(x,y)
-            await discord_webhook.send_discord_alert(f"🟢 The car has started moving from coordinate ({x}, {y})")
+            await discord_webhook.send_discord_alert(f"🟢 The car has started moving to coordinate ({x}, {y})")
 
         return JSONResponse(content={"message": "Start Processed"}, status_code=200)
     except Exception as e:
