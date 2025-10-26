@@ -3,7 +3,7 @@ import logging
 
 logger = logging.getLogger("uvicorn")
 
-discord_webhook_url = "https://discord.com/api/webhooks/1429084904150536233/a5xRd6SCcY1BYawX3rd5EjPmIA3TtJMsDJ1CTnfLKO2zl1LQvQ9KzLuCwwQWsN3alTaQ"
+discord_webhook_url = "https://discord.com/api/webhooks/1429655507077169384/cwlY3IL3RNDzuxCSgEeJEOARrU5oWj29tG4mrY4clFwMNE11gPWsLnz3Lv2oX7GIz-jZ"
 
 """
 Function untuk mengirim alert ke discord
