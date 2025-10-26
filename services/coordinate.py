@@ -174,7 +174,13 @@ async def insert_path(path_dto: CoordinateModel):
     except Exception as e:
         logger.error(f"Error: {e}")
         return
+    db.coordinate.update_one(
+        {
+            {"status": {"$eq": "ONGOING"}},
+        },
+        {"$set": curr_data.model_dump()},
 
+    )
     logger.error(curr_data)
 
 
