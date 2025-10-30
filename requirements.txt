@@ -6,3 +6,4 @@ fastapi-mqtt
 gmqtt
 motor
 numpy
+filterpy

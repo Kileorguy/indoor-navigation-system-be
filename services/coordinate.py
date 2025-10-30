@@ -167,21 +167,26 @@ async def insert_path(path_dto: CoordinateModel):
     db = await get_database()
 
     try:
-        curr_data = db.find_one({"status": "ONGOING"})
+        curr_data = db.coordinate.find_one({"status": "ONGOING"})
         if curr_data is None:
             logger.error("No ongoing order found")
             return
     except Exception as e:
         logger.error(f"Error: {e}")
         return
-    db.coordinate.update_one(
-        {
-            {"status": {"$eq": "ONGOING"}},
-        },
-        {"$set": curr_data.model_dump()},
 
-    )
-    logger.error(curr_data)
+    try:
+        result = await db.coordinate.update_one(
+            {"status": "ONGOING"},
+            {"$push": {"paths": path_dto.target_point.model_dump()}}
+        )
+
+        if result.matched_count == 0:
+            logger.error("No ongoing order found to update")
+        else:
+            logger.info("Successfully appended new path point")
+    except Exception as e:
+        logger.error(f"Error updating paths: {e}")
 
 
 

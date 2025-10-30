@@ -13,6 +13,7 @@ from services.raw_rssi import insert_raw_rssi_data
 from models.raw_rssi import RawRSSI
 from models.log import Log as LogModel, StatusEnum as LogEnum
 from services.logs import insert_logs_data
+from services.kalman_filter import RSSITrilaterationUKFSingleton
 
 logger = logging.getLogger("uvicorn")
 
@@ -21,6 +22,8 @@ subscriber mqtt untuk menentukan start position
 """
 @fast_mqtt.subscribe("things/rssi/start", qos=0)
 async def save_start_rssi(client: MQTTClient, topic: str, payload: bytes, qos: int, properties: Any):
+    kf = RSSITrilaterationUKFSingleton()
+    kf.reinitialize()
     payload = json.loads(payload.decode())
 
     rssi1 = payload["r1"]
@@ -52,7 +55,13 @@ async def save_start_rssi(client: MQTTClient, topic: str, payload: bytes, qos: i
     logger.error(f"{rssi1}, {rssi2}, {rssi3}")
     logger.error(f"{type(rssi1)}, {type(rssi2)}, {type(rssi3)}")
 
-    x,y = service.rssi_to_coordinate(rssi1, rssi2, rssi3)
+    # normal calculation - noisy
+    # x,y = service.rssi_to_coordinate(rssi1, rssi2, rssi3)
+
+    # kalman filter calculation
+    kf.predict()
+    kf.update([rssi1,rssi2,rssi3])
+    x,y = kf.get_position()
 
     dto = CoordinateModel(
         start_point=Coordinate(x=x, y=y),
@@ -126,6 +135,8 @@ subscriber mqtt untuk mendapatkan historical data path device
 """
 @fast_mqtt.subscribe("things/rssi/path", qos=0)
 async def save_path_rssi(client: MQTTClient, topic: str, payload: bytes, qos: int, properties: Any):
+    kf = RSSITrilaterationUKFSingleton()
+
     payload = json.loads(payload.decode())
 
     rssi1 = payload["r1"]
@@ -151,6 +162,8 @@ async def save_path_rssi(client: MQTTClient, topic: str, payload: bytes, qos: in
     rssi2 = filter_data(rssi2)
     rssi3 = filter_data(rssi3)
 
+
+
     check, msg = validate_payload(rssi1, rssi2, rssi3)
     if not check:
         logger.error(msg)
@@ -158,7 +171,13 @@ async def save_path_rssi(client: MQTTClient, topic: str, payload: bytes, qos: in
     else:
         logger.info(msg)
 
-    x,y = service.rssi_to_coordinate(rssi1, rssi2, rssi3)
+    # manual calculation - noisy
+    # x,y = service.rssi_to_coordinate(rssi1, rssi2, rssi3)
+
+    kf.predict()
+    kf.update([rssi1, rssi2, rssi3])
+
+    x,y = kf.get_position()
 
 
     dto = CoordinateModel(
