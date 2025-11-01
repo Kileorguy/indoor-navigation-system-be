@@ -31,7 +31,7 @@ class RSSITrilaterationUKFSingleton:
 
         dim_x = 4
         dim_z = len(self.beacons)
-        points = MerweScaledSigmaPoints(n=dim_x, alpha=0.05, beta=2.0, kappa=1.0)
+        points = MerweScaledSigmaPoints(n=dim_x, alpha=0.05, beta=1.0, kappa=1.0)
 
         def fx(x, dt_val):
             F = np.array([
@@ -58,7 +58,7 @@ class RSSITrilaterationUKFSingleton:
         self.ukf = UnscentedKalmanFilter(dim_x=dim_x, dim_z=dim_z, dt=dt, fx=fx, hx=hx, points=points)
         self.ukf.x = np.array([0.0, 0.0, 0.05, 0.05])
         self.ukf.P = np.eye(dim_x) * 2
-        self.ukf.Q = np.diag([0.005, 0.005, 0.01, 0.01])
+        self.ukf.Q = np.diag([0.001, 0.001, 0.01, 0.01])
         self.ukf.R = np.eye(dim_z) * 4
 
     def predict(self):
