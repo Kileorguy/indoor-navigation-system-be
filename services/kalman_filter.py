@@ -56,10 +56,10 @@ class RSSITrilaterationUKFSingleton:
             return rssi_expected
 
         self.ukf = UnscentedKalmanFilter(dim_x=dim_x, dim_z=dim_z, dt=dt, fx=fx, hx=hx, points=points)
-        self.ukf.x = np.array([0.0, 0.0, 0.05, 0.05])
-        self.ukf.P = np.eye(dim_x) * 2
-        self.ukf.Q = np.diag([0.001, 0.001, 0.01, 0.01])
-        self.ukf.R = np.eye(dim_z) * 4
+        self.ukf.x = np.array([0.0, 0.0, 0.001, 0.001])
+        self.ukf.P = np.diag([10.0, 10.0, 1.0, 1.0])
+        self.ukf.Q = np.diag([0.005, 0.005, 0.01, 0.01])
+        self.ukf.R = np.eye(dim_z) * 7
 
     def predict(self):
         self.ukf.predict()
