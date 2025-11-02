@@ -21,16 +21,15 @@ async def get_logs(
     page: int = Query(1, ge=1, description="Page number"),
     limit: int = Query(10, ge=1, le=100, description="Number of logs per page"),
 ):
+    """Endpoint untuk mendapatkan logs yang akan digunakan pada dashboard"""
     query = {}
 
     if day:
         try:
-            # Convert input day (local) to UTC range
             local_tz = timezone(timedelta(hours=7))  # GMT+7 for example
             start_of_day = datetime.strptime(day, "%Y-%m-%d").replace(tzinfo=local_tz)
             end_of_day = start_of_day + timedelta(days=1)
 
-            # Convert to UTC for MongoDB
             start_utc = start_of_day.astimezone(timezone.utc)
             end_utc = end_of_day.astimezone(timezone.utc)
 

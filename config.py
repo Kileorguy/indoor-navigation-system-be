@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings
 from fastapi_mqtt import MQTTConfig
 from motor.motor_asyncio import AsyncIOMotorClient
 from urllib.parse import quote_plus
-
+"""Berisikan config 0 config yang akan digunakan oleh backend maupun hasil kalibrasi RSSI"""
 class Settings(BaseSettings):
     mqtt_host: str = "localhost"
     mqtt_port: int = 1883

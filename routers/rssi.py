@@ -41,7 +41,7 @@ class Item(BaseModel):
     y: float
 @route.post("/target_coordinate")
 async def target_coordinate(item: Item):
-
+    """Endpoint yang digunakan untuk menentukan target position"""
     try:
         dto = CoordinateModel(
             start_point=None,

@@ -1,17 +1,20 @@
 import numpy as np
 from filterpy.kalman import UnscentedKalmanFilter, MerweScaledSigmaPoints
 from config import calculate_config
-
 class RSSITrilaterationUKFSingleton:
+    """Suatu class singleton yang digunakan untuk membuat object Kalman Filter"""
     _instance = None
 
     def __new__(cls, *args, **kwargs):
+        """Membuat instance baru singleton"""
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             cls._instance._initialized = False
         return cls._instance
 
     def __init__(self, dt=2):
+        """Membuat instance class"""
+
         if self._initialized:
             return
 
@@ -19,6 +22,8 @@ class RSSITrilaterationUKFSingleton:
         self._create_filter(dt)
 
     def _create_filter(self, dt):
+        """Membuat object Kalman filter baru"""
+
         self.beacons = np.array([calculate_config.BEACON1_POS, calculate_config.BEACON2_POS, calculate_config.BEACON3_POS])
         self.RSSI1 = calculate_config.TX_POWER1
         self.RSSI2 = calculate_config.TX_POWER2
@@ -74,6 +79,7 @@ class RSSITrilaterationUKFSingleton:
         return self.ukf.x[2:].copy()
 
     def reinitialize(self,dt=2):
+        """Membuat ulang object Kalman Filter"""
 
         self._create_filter(
            self.dt

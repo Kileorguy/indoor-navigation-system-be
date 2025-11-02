@@ -12,6 +12,7 @@ async def insert_logs_data(log_dto: Log):
     return result
 
 async def get_logs_data(query, page, limit=10):
+    """Untuk mendapatkan data logs dari database ke dashboard"""
     db = await get_database()
     skip = (page - 1) * limit
 

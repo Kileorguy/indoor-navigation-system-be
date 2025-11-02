@@ -64,6 +64,7 @@ def rssi_to_coordinate(rssi1 : float,
 
 
 async def insert_start_coordinate(coordinate_dto: CoordinateModel) -> str:
+    """Function untuk menginsert ke DB start coordinate yang diberikan oleh ESP32"""
     db = await get_database()
     update_fields = {
         "status": coordinate_dto.status,
@@ -113,6 +114,7 @@ async def insert_start_coordinate(coordinate_dto: CoordinateModel) -> str:
         return "Nothing Changed"
 
 async def insert_end_coordinate(coordinate_dto: CoordinateModel) -> str:
+    """Function yang dipakai untuk menginsert data destination dari dashboard ke dalam database"""
     db = await get_database()
 
     update_fields = {
@@ -164,6 +166,7 @@ async def insert_end_coordinate(coordinate_dto: CoordinateModel) -> str:
 
 
 async def insert_path(path_dto: CoordinateModel):
+    """Function yang digunakan untuk menginsert perjalanan mobil ESP32 ke dalam database"""
     db = await get_database()
 
     try:
@@ -192,6 +195,7 @@ async def insert_path(path_dto: CoordinateModel):
 
 
 async def start_navigation() -> {int,int}:
+    """Function yang digunakan untuk memberi sinyal untuk memulai jalan pada esp32"""
 
     try:
 
@@ -229,6 +233,7 @@ async def start_navigation() -> {int,int}:
     return -1,-1
 
 async def end_navigation() -> str:
+    """Function untuk menandakan mobil sudah sampai tujuan"""
     db = await get_database()
 
     _ = await db.coordinate.update_one(
